@@ -10,169 +10,120 @@
   <div class="container wide">
     <a href="index.html" class="back">&larr; Back to Home</a>
     <h1>Expenses</h1>
-    <p class="subtitle">Recent purchases from QuickBooks</p>
+    <p class="subtitle">Spending by category from QuickBooks</p>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Vendor</th>
-          <th>Category</th>
-          <th>Description</th>
-          <th class="amount">Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>2026-03-07</td>
-          <td>Norma's Basket</td>
-          <td>Office/General Admin</td>
-          <td>WP*Normas Basket</td>
-          <td class="amount">$79.69</td>
-        </tr>
-        <tr>
-          <td>2026-03-07</td>
-          <td>Google</td>
-          <td>Google Marketing</td>
-          <td>GOOGLE *ADS</td>
-          <td class="amount">$500.00</td>
-        </tr>
-        <tr>
-          <td>2026-03-06</td>
-          <td>Amazon</td>
-          <td>Cottage Supplies</td>
-          <td>AMAZON MKTPL</td>
-          <td class="amount">$18.98</td>
-        </tr>
-        <tr>
-          <td>2026-03-06</td>
-          <td>Amazon</td>
-          <td>Cottage Supplies</td>
-          <td>AMAZON MKTPL</td>
-          <td class="amount">$19.69</td>
-        </tr>
-        <tr>
-          <td>2026-03-06</td>
-          <td>Amazon</td>
-          <td>Hot Tubs</td>
-          <td>AMAZON MKTPL</td>
-          <td class="amount">$21.99</td>
-        </tr>
-        <tr>
-          <td>2026-03-06</td>
-          <td>Amazon</td>
-          <td>Auto Maintenance</td>
-          <td>AMAZON MKTPL</td>
-          <td class="amount">$31.98</td>
-        </tr>
-        <tr>
-          <td>2026-03-06</td>
-          <td>Amazon</td>
-          <td>Hospitality Essentials</td>
-          <td>AMAZON MKTPL</td>
-          <td class="amount">$43.98</td>
-        </tr>
-        <tr>
-          <td>2026-03-06</td>
-          <td>Amazon</td>
-          <td>Hospitality Essentials</td>
-          <td>AMAZON MKTPL</td>
-          <td class="amount">$64.99</td>
-        </tr>
-        <tr>
-          <td>2026-03-06</td>
-          <td>Amazon</td>
-          <td>Animal Supplies</td>
-          <td>AMAZON MKTPL</td>
-          <td class="amount">$93.45</td>
-        </tr>
-        <tr>
-          <td>2026-03-05</td>
-          <td>Hazels Handyman Services</td>
-          <td>Livestock Feed</td>
-          <td>CHECK # 2993</td>
-          <td class="amount">$520.00</td>
-        </tr>
-        <tr>
-          <td>2026-03-05</td>
-          <td>Jalene Dick</td>
-          <td>Office/General Admin</td>
-          <td>CHECK # 2992</td>
-          <td class="amount">$4,750.00</td>
-        </tr>
-        <tr>
-          <td>2026-03-05</td>
-          <td>Chase</td>
-          <td>Travel</td>
-          <td>CL *Chase Travel</td>
-          <td class="amount">$307.36</td>
-        </tr>
-        <tr>
-          <td>2026-03-04</td>
-          <td>Egbert</td>
-          <td>Office/General Admin</td>
-          <td>CHECK # 3040</td>
-          <td class="amount">$549.00</td>
-        </tr>
-        <tr>
-          <td>2026-03-04</td>
-          <td>Aaron Ballou</td>
-          <td>Animal Care - Labor</td>
-          <td>CHECK # 2991</td>
-          <td class="amount">$200.00</td>
-        </tr>
-        <tr>
-          <td>2026-03-04</td>
-          <td>Connor McWilliams</td>
-          <td>PAL Loan Repayment</td>
-          <td>Online Transfer</td>
-          <td class="amount">$3,389.37</td>
-        </tr>
-        <tr>
-          <td>2026-03-03</td>
-          <td>Astound Broadband</td>
-          <td>Internet</td>
-          <td>ASTOUND</td>
-          <td class="amount">$95.00</td>
-        </tr>
-        <tr>
-          <td>2026-03-03</td>
-          <td>Canva</td>
-          <td>Office/General Admin</td>
-          <td>Canva Subscription</td>
-          <td class="amount">$81.00</td>
-        </tr>
-        <tr>
-          <td>2026-03-03</td>
-          <td>Monticello Antique Market</td>
-          <td>Wedding/Event Expenses</td>
-          <td>MONTICELLO ANTIQUE MARKET</td>
-          <td class="amount">$4,145.00</td>
-        </tr>
-        <tr>
-          <td>2026-03-03</td>
-          <td>Shell</td>
-          <td>Gas &amp; Fuel</td>
-          <td>SHELL OIL</td>
-          <td class="amount">$105.95</td>
-        </tr>
-        <tr>
-          <td>2026-03-03</td>
-          <td>Unknown</td>
-          <td>Social Media Marketing</td>
-          <td>RESEND</td>
-          <td class="amount">$20.00</td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="4"><strong>Total (20 recent transactions)</strong></td>
-          <td class="amount"><strong>$15,037.43</strong></td>
-        </tr>
-      </tfoot>
-    </table>
+    <div class="filters">
+      <button class="filter-btn" data-range="week">This Week</button>
+      <button class="filter-btn" data-range="month">This Month</button>
+      <button class="filter-btn" data-range="last-month">Last Month</button>
+      <button class="filter-btn" data-range="quarter">This Quarter</button>
+      <button class="filter-btn" data-range="ytd">Year to Date</button>
+      <button class="filter-btn active" data-range="all">All Time</button>
+      <div class="custom-range">
+        <input type="date" id="startDate" value="2025-10-29">
+        <span>to</span>
+        <input type="date" id="endDate" value="2026-03-07">
+        <button class="filter-btn" data-range="custom">Apply</button>
+      </div>
+    </div>
+
+    <div class="summary-bar">
+      <div class="summary-total">Total: <strong id="grandTotal">$0</strong></div>
+      <div class="summary-count"><span id="txnCount">0</span> transactions</div>
+      <div class="summary-period" id="periodLabel">All Time</div>
+    </div>
+
+    <div id="categories"></div>
 
     <p class="footer-note">Data sourced from QuickBooks &middot; Last updated March 10, 2026</p>
   </div>
+
+  <script>
+    const DATA=[{"d":"2026-03-07","c":"Office/General Administrative Expenses","a":79.69},{"d":"2026-03-07","c":"Advertising/Promotional","a":500},{"d":"2026-03-06","c":"Highland Farms Cottage - Supplies","a":18.98},{"d":"2026-03-06","c":"Highland Farms Cottage - Supplies","a":19.69},{"d":"2026-03-06","c":"Highland Farms - Hot tubs","a":21.99},{"d":"2026-03-06","c":"Auto","a":31.98},{"d":"2026-03-06","c":"Cleaning Services - Hospitality Essentials","a":43.98},{"d":"2026-03-06","c":"Cleaning Services - Hospitality Essentials","a":64.99},{"d":"2026-03-06","c":"Animal Supplies","a":93.45},{"d":"2026-03-05","c":"Livestock Feed","a":520},{"d":"2026-03-05","c":"Office/General Administrative Expenses","a":4750},{"d":"2026-03-05","c":"Travel","a":307.36},{"d":"2026-03-04","c":"Office/General Administrative Expenses","a":549},{"d":"2026-03-04","c":"Animal care  - labor","a":200},{"d":"2026-03-04","c":"PAL loan repayment","a":3389.37},{"d":"2026-03-03","c":"Utilities","a":95},{"d":"2026-03-03","c":"Office/General Administrative Expenses","a":81},{"d":"2026-03-03","c":"Wedding/Event expenses","a":4145},{"d":"2026-03-03","c":"Auto","a":105.95},{"d":"2026-03-03","c":"Advertising/Promotional","a":20},{"d":"2026-03-03","c":"Advertising/Promotional","a":878},{"d":"2026-03-02","c":"Animal care  - labor","a":1765},{"d":"2026-03-02","c":"Advertising/Promotional","a":640},{"d":"2026-03-02","c":"Chase Ink","a":3890.26},{"d":"2026-03-02","c":"Auto","a":57.92},{"d":"2026-03-02","c":"Website Expenses","a":564.61},{"d":"2026-03-02","c":"Chase Ink","a":-3890.26},{"d":"2026-03-01","c":"Office/General Administrative Expenses","a":38},{"d":"2026-03-01","c":"Advertising/Promotional","a":367.43},{"d":"2026-03-01","c":"Advertising/Promotional","a":10.46},{"d":"2026-02-28","c":"Website Expenses","a":20},{"d":"2026-02-28","c":"Website Expenses","a":25},{"d":"2026-02-28","c":"Highland Farms - Hot tubs","a":85.91},{"d":"2026-02-28","c":"Highland Farms - Hot tubs","a":109.98},{"d":"2026-02-28","c":"Animal Supplies","a":16.96},{"d":"2026-02-28","c":"Cleaning Services - Hospitality Essentials","a":52.53},{"d":"2026-02-27","c":"Advertising/Promotional","a":49.44},{"d":"2026-02-27","c":"Animal care  - labor","a":75},{"d":"2026-02-27","c":"Cleaning Services - Labor","a":400},{"d":"2026-02-27","c":"Animal care  - labor","a":102.5},{"d":"2026-02-27","c":"Highland Farms - Pasture","a":700},{"d":"2026-02-27","c":"Cleaning Services - Labor","a":1550},{"d":"2026-02-27","c":"Animal care  - labor","a":2018},{"d":"2026-02-27","c":"Bank Charges","a":2.5},{"d":"2026-02-26","c":"Animal care  - labor","a":1120},{"d":"2026-02-26","c":"Auto","a":58.02},{"d":"2026-02-26","c":"Office/General Administrative Expenses","a":1},{"d":"2026-02-26","c":"Advertising/Promotional","a":500},{"d":"2026-02-26","c":"Advertising/Promotional","a":878},{"d":"2026-02-25","c":"Animal care  - labor","a":1487.5},{"d":"2026-02-25","c":"Livestock Feed","a":83.88},{"d":"2026-02-25","c":"Highland Farms Lodge - Maintenance","a":14.98},{"d":"2026-02-25","c":"Land Improvements","a":132},{"d":"2026-02-25","c":"Land Improvements","a":132},{"d":"2026-02-24","c":"Utilities","a":70.89},{"d":"2026-02-24","c":"Meals & Entertainment","a":42},{"d":"2026-02-23","c":"Advertising/Promotional","a":500},{"d":"2026-02-22","c":"Highland Farms Lodge - Maintenance","a":405},{"d":"2026-02-22","c":"Auto","a":108.84},{"d":"2026-02-22","c":"Utilities","a":82.99},{"d":"2026-02-21","c":"Office/General Administrative Expenses","a":19.6},{"d":"2026-02-21","c":"Meals & Entertainment","a":124.8},{"d":"2026-02-21","c":"Advertising/Promotional","a":878},{"d":"2026-02-20","c":"Repairs & Maintenance","a":490},{"d":"2026-02-20","c":"Cleaning Services","a":697.45},{"d":"2026-02-20","c":"Highland Farms Lodge - Maintenance","a":590},{"d":"2026-02-20","c":"Office/General Administrative Expenses","a":2228},{"d":"2026-02-20","c":"Advertising/Promotional","a":500},{"d":"2026-02-20","c":"Meals & Entertainment","a":357.73},{"d":"2026-02-20","c":"Highland Farms Lodge - Maintenance","a":245},{"d":"2026-02-20","c":"Wedding/Event expenses","a":50.33},{"d":"2026-02-20","c":"Cleaning Services - Hospitality Essentials","a":17.73},{"d":"2026-02-20","c":"Animal Supplies","a":103.84},{"d":"2026-02-20","c":"Repairs & Maintenance","a":4788},{"d":"2026-02-20","c":"Advertising/Promotional","a":100},{"d":"2026-02-20","c":"Advertising/Promotional","a":99.5},{"d":"2026-02-20","c":"Highland Farms - Hot tubs","a":84.5},{"d":"2026-02-20","c":"Advertising/Promotional","a":37.49},{"d":"2026-02-19","c":"Animal Processing","a":1151.25},{"d":"2026-02-19","c":"Livestock Feed","a":2138},{"d":"2026-02-19","c":"Livestock Feed","a":860},{"d":"2026-02-19","c":"Cleaning Essentials","a":112.24},{"d":"2026-02-19","c":"Cleaning Essentials","a":61.64},{"d":"2026-02-18","c":"Office/General Administrative Expenses","a":96},{"d":"2026-02-18","c":"Advertising/Promotional","a":2000},{"d":"2026-02-18","c":"Utilities","a":1990.01},{"d":"2026-02-18","c":"Advertising/Promotional","a":34.07},{"d":"2026-02-17","c":"Supplies & Materials","a":70},{"d":"2026-02-17","c":"Highland Reserve - land improvement","a":1160},{"d":"2026-02-17","c":"Livestock Feed","a":121.37},{"d":"2026-02-17","c":"Highland Farms Cottage - Supplies","a":55.96},{"d":"2026-02-16","c":"Cleaning Essentials","a":35.44},{"d":"2026-02-16","c":"Highland Farms - Hot tubs","a":4.5},{"d":"2026-02-16","c":"Advertising/Promotional","a":850},{"d":"2026-02-15","c":"Advertising/Promotional","a":650},{"d":"2026-02-15","c":"Land Improvements","a":176},{"d":"2026-02-15","c":"Auto","a":56.44},{"d":"2026-02-15","c":"Cleaning Essentials","a":28.88},{"d":"2026-02-15","c":"Meals & Entertainment","a":26.8},{"d":"2026-02-14","c":"Land Improvements","a":176},{"d":"2026-02-13","c":"Repairs & Maintenance","a":99.5},{"d":"2026-02-13","c":"Cleaning Services - Labor","a":1473},{"d":"2026-02-13","c":"Partner's Equity - Connor McWilliams","a":2200},{"d":"2026-02-13","c":"Land Improvements","a":176},{"d":"2026-02-13","c":"Cleaning Essentials","a":125.08},{"d":"2026-02-13","c":"Land Improvements","a":132},{"d":"2026-02-13","c":"Advertising/Promotional","a":44.11},{"d":"2026-02-13","c":"Advertising/Promotional","a":33.85},{"d":"2026-02-13","c":"Bank Charges","a":6.5},{"d":"2026-02-12","c":"Animal care  - labor","a":975},{"d":"2026-02-12","c":"Animal care  - labor","a":1200},{"d":"2026-02-12","c":"Labor - Tour Education","a":1606},{"d":"2026-02-12","c":"Cleaning Services - Hospitality Essentials","a":239.92},{"d":"2026-02-12","c":"Advertising/Promotional","a":170},{"d":"2026-02-12","c":"Animal Supplies","a":17.84},{"d":"2026-02-12","c":"Office/General Administrative Expenses","a":70},{"d":"2026-02-12","c":"Website Expenses","a":32.89},{"d":"2026-02-12","c":"Advertising/Promotional","a":59.01},{"d":"2026-02-12","c":"Advertising/Promotional","a":15.5},{"d":"2026-02-12","c":"Website Expenses","a":33.6},{"d":"2026-02-11","c":"Animal care  - labor","a":2000},{"d":"2026-02-11","c":"Pest Control","a":150},{"d":"2026-02-11","c":"Pest Control","a":97},{"d":"2026-02-11","c":"Advertising/Promotional","a":3700},{"d":"2026-02-11","c":"Forest lighting","a":159.17},{"d":"2026-02-11","c":"Advertising/Promotional","a":30.98},{"d":"2026-02-09","c":"Mortgage Payable - Newrez / Shellpoint","a":4526.2},{"d":"2026-02-09","c":"Office/General Administrative Expenses","a":58.8},{"d":"2026-02-08","c":"Advertising/Promotional","a":340.84},{"d":"2026-02-08","c":"Highland Farms - Hot tubs","a":29.99},{"d":"2026-02-08","c":"Auto","a":43.2},{"d":"2026-02-08","c":"Advertising/Promotional","a":3},{"d":"2026-02-07","c":"Barn Supplies","a":38.91},{"d":"2026-02-06","c":"Cleaning Essentials","a":-33.29},{"d":"2026-02-06","c":"Barn Supplies","a":48.06},{"d":"2026-02-05","c":"Wedding/Event expenses","a":1400},{"d":"2026-02-05","c":"Meals & Entertainment","a":33.2},{"d":"2026-02-05","c":"Auto","a":67.39},{"d":"2026-02-04","c":"Highland Farms - Front Gate","a":850},{"d":"2026-02-04","c":"Highland Farms - Hot tubs","a":25},{"d":"2026-02-04","c":"Auto","a":18.42},{"d":"2026-02-04","c":"Auto","a":17.52},{"d":"2026-02-03","c":"Animal care  - labor","a":1734.33},{"d":"2026-02-03","c":"Transient Occupancy Tax","a":362.45},{"d":"2026-02-03","c":"Transient Occupancy Tax","a":99.97},{"d":"2026-02-03","c":"Transient Occupancy Tax","a":10.11},{"d":"2026-02-03","c":"Transient Occupancy Tax","a":2.79},{"d":"2026-02-03","c":"Highland Farms - Cow Craving","a":800},{"d":"2026-02-02","c":"Repairs & Maintenance","a":1850},{"d":"2026-02-02","c":"Forest lighting","a":260.7},{"d":"2026-02-02","c":"Advertising/Promotional","a":49.94},{"d":"2026-02-02","c":"Auto","a":45},{"d":"2026-02-02","c":"Website Expenses","a":2.44},{"d":"2026-02-02","c":"Advertising/Promotional","a":770},{"d":"2026-02-01","c":"Advertising/Promotional","a":167.65},{"d":"2026-02-01","c":"Advertising/Promotional","a":18.5},{"d":"2026-02-01","c":"Auto","a":107.43},{"d":"2026-02-01","c":"Meals & Entertainment","a":111},{"d":"2026-02-01","c":"Advertising/Promotional","a":49.42},{"d":"2026-02-01","c":"Advertising/Promotional","a":16.13},{"d":"2026-02-01","c":"Advertising/Promotional","a":15},{"d":"2026-01-31","c":"Meals & Entertainment","a":159.6},{"d":"2026-01-31","c":"Advertising/Promotional","a":194.75},{"d":"2026-01-31","c":"Advertising/Promotional","a":22},{"d":"2026-01-31","c":"Utilities","a":95},{"d":"2026-01-31","c":"Website Expenses","a":25},{"d":"2026-01-30","c":"Forest lighting","a":258.53},{"d":"2026-01-30","c":"Advertising/Promotional","a":500},{"d":"2026-01-30","c":"Cleaning Services - Hospitality Essentials","a":46.46},{"d":"2026-01-30","c":"Cleaning Services - Hospitality Essentials","a":45.81},{"d":"2026-01-30","c":"Wedding/Event expenses","a":124.47},{"d":"2026-01-30","c":"Auto","a":103.45},{"d":"2026-01-30","c":"Auto","a":27.96},{"d":"2026-01-30","c":"Highland Farms - Hot tubs","a":216.2},{"d":"2026-01-29","c":"Animal care  - labor","a":526},{"d":"2026-01-29","c":"Office/General Administrative Expenses","a":38},{"d":"2026-01-28","c":"Office/General Administrative Expenses","a":2128.26},{"d":"2026-01-28","c":"Animal care  - labor","a":1300},{"d":"2026-01-28","c":"Livestock Feed","a":243.9},{"d":"2026-01-28","c":"Meals & Entertainment","a":18},{"d":"2026-01-28","c":"Advertising/Promotional","a":745},{"d":"2026-01-28","c":"Website Expenses","a":20},{"d":"2026-01-27","c":"Highland Farms - Pasture","a":725},{"d":"2026-01-27","c":"Highland Farms - Pasture","a":200},{"d":"2026-01-27","c":"Advertising/Promotional","a":500},{"d":"2026-01-27","c":"Farm Store Expenses","a":165},{"d":"2026-01-27","c":"Auto","a":60},{"d":"2026-01-27","c":"Advertising/Promotional","a":74.81},{"d":"2026-01-26","c":"Utilities","a":70.89},{"d":"2026-01-26","c":"Meals & Entertainment","a":25.4},{"d":"2026-01-25","c":"Office/General Administrative Expenses","a":39.2},{"d":"2026-01-25","c":"Cleaning Services - Labor","a":280},{"d":"2026-01-24","c":"Cleaning Services - Hospitality Essentials","a":38.83},{"d":"2026-01-24","c":"Highland Farms Cottage - Maintenance","a":48.15},{"d":"2026-01-24","c":"Farm Store Expenses","a":259.9},{"d":"2026-01-24","c":"Advertising/Promotional","a":500},{"d":"2026-01-24","c":"Advertising/Promotional","a":721},{"d":"2026-01-23","c":"Meals & Entertainment","a":889.38},{"d":"2026-01-23","c":"Cleaning Services - Labor","a":1065},{"d":"2026-01-22","c":"Utilities","a":82.99},{"d":"2026-01-21","c":"Office/General Administrative Expenses","a":200},{"d":"2026-01-21","c":"Auto","a":107.38},{"d":"2026-01-21","c":"Advertising/Promotional","a":500},{"d":"2026-01-21","c":"Auto","a":40},{"d":"2026-01-21","c":"Advertising/Promotional","a":179.99},{"d":"2026-01-20","c":"Cleaning Services - Hospitality Essentials","a":85.49},{"d":"2026-01-20","c":"Office/General Administrative Expenses","a":2228},{"d":"2026-01-20","c":"Cleaning Services - Hospitality Essentials","a":68.86},{"d":"2026-01-20","c":"Land Improvements","a":274},{"d":"2026-01-20","c":"Auto","a":70.7},{"d":"2026-01-19","c":"Advertising/Promotional","a":1237.5},{"d":"2026-01-18","c":"Bank Charges","a":40},{"d":"2026-01-18","c":"Advertising/Promotional","a":500},{"d":"2026-01-18","c":"Animal care  - labor","a":1512.5},{"d":"2026-01-18","c":"Advertising/Promotional","a":697},{"d":"2026-01-16","c":"Labor - Tour Education","a":1370},{"d":"2026-01-15","c":"Office/General Administrative Expenses","a":205.75},{"d":"2026-01-15","c":"Travel","a":60},{"d":"2026-01-15","c":"Advertising/Promotional","a":500},{"d":"2026-01-15","c":"Repairs & Maintenance","a":20.07},{"d":"2026-01-15","c":"Repairs & Maintenance","a":41.97},{"d":"2026-01-15","c":"Highland Farms Lodge - Maintenance","a":373.94},{"d":"2026-01-15","c":"Bank Charges","a":6.5},{"d":"2026-01-14","c":"Animal care  - labor","a":815},{"d":"2026-01-14","c":"Insurance","a":17542.74},{"d":"2026-01-14","c":"Forest lighting","a":519.82},{"d":"2026-01-13","c":"Bank Charges","a":36},{"d":"2026-01-13","c":"Livestock Feed","a":249.47},{"d":"2026-01-13","c":"Highland Farms - Hot tubs","a":810},{"d":"2026-01-13","c":"Land Improvements","a":850},{"d":"2026-01-13","c":"Highland Farms Lodge - Maintenance","a":36.5},{"d":"2026-01-12","c":"Office/General Administrative Expenses","a":20},{"d":"2026-01-12","c":"Website Expenses","a":29.99},{"d":"2026-01-12","c":"Office/General Administrative Expenses","a":45},{"d":"2026-01-12","c":"Advertising/Promotional","a":500},{"d":"2026-01-12","c":"Utilities","a":1683.42},{"d":"2026-01-12","c":"Land Improvements","a":1075},{"d":"2026-01-12","c":"Livestock Feed","a":2140},{"d":"2026-01-12","c":"Auto","a":28.84},{"d":"2026-01-12","c":"Website Expenses","a":25.2},{"d":"2026-01-11","c":"Auto","a":91.98},{"d":"2026-01-11","c":"Auto","a":335.23},{"d":"2026-01-11","c":"Advertising/Promotional","a":612.58},{"d":"2026-01-10","c":"Advertising/Promotional","a":500},{"d":"2026-01-08","c":"Auto","a":90.25},{"d":"2026-01-08","c":"Land Improvements","a":331.47},{"d":"2026-01-08","c":"Cleaning Services - Labor","a":1077.5},{"d":"2026-01-08","c":"Repairs & Maintenance","a":7258},{"d":"2026-01-07","c":"Mortgage Payable - Newrez / Shellpoint","a":4676.67},{"d":"2026-01-06","c":"Highland Farms Cottage - Supplies","a":179.94},{"d":"2026-01-06","c":"Farm Store Expenses","a":163.81},{"d":"2026-01-06","c":"Advertising/Promotional","a":500},{"d":"2026-01-06","c":"Forest lighting","a":411.35},{"d":"2026-01-05","c":"Website Expenses","a":100},{"d":"2026-01-05","c":"Advertising/Promotional","a":99.5},{"d":"2026-01-05","c":"Advertising/Promotional","a":100},{"d":"2026-01-04","c":"Advertising/Promotional","a":165.75},{"d":"2026-01-04","c":"Auto","a":17.76},{"d":"2026-01-03","c":"Cleaning Services - Hospitality Essentials","a":33.29},{"d":"2026-01-03","c":"Cleaning Services - Hospitality Essentials","a":40.79},{"d":"2026-01-03","c":"Advertising/Promotional","a":500},{"d":"2026-01-03","c":"Utilities","a":200},{"d":"2026-01-02","c":"Travel","a":28},{"d":"2026-01-01","c":"Advertising/Promotional","a":150.85},{"d":"2025-12-31","c":"Labor - Tour Education","a":1975},{"d":"2025-12-31","c":"Auto","a":1184.73},{"d":"2025-12-31","c":"Utilities","a":95},{"d":"2025-12-31","c":"Bank Charges","a":0.4},{"d":"2025-12-31","c":"Website Expenses","a":25},{"d":"2025-12-30","c":"Repairs & Maintenance","a":137.45},{"d":"2025-12-30","c":"Highland Farms Lodge - Maintenance","a":137.45},{"d":"2025-12-30","c":"Farm Store Expenses","a":205.5},{"d":"2025-12-30","c":"Advertising/Promotional","a":500},{"d":"2025-12-30","c":"Animal care  - labor","a":660},{"d":"2025-12-29","c":"Office/General Administrative Expenses","a":38},{"d":"2025-12-28","c":"Spa - Installation","a":106.96},{"d":"2025-12-28","c":"Advertising/Promotional","a":500},{"d":"2025-12-28","c":"Website Expenses","a":20},{"d":"2025-12-26","c":"Advertising/Promotional","a":500},{"d":"2025-12-26","c":"Utilities","a":550.43},{"d":"2025-12-26","c":"Office/General Administrative Expenses","a":45},{"d":"2025-12-24","c":"Farm Store Expenses","a":274.9},{"d":"2025-12-24","c":"Utilities","a":70.89},{"d":"2025-12-23","c":"Office/General Administrative Expenses","a":29.45},{"d":"2025-12-23","c":"Advertising/Promotional","a":500},{"d":"2025-12-22","c":"Auto","a":64.61},{"d":"2025-12-22","c":"Utilities","a":82.99},{"d":"2025-12-21","c":"Advertising/Promotional","a":28.87},{"d":"2025-12-20","c":"Repairs & Maintenance","a":98},{"d":"2025-12-20","c":"Repairs & Maintenance","a":14.2},{"d":"2025-12-19","c":"Auto","a":9.21},{"d":"2025-12-19","c":"Auto","a":100},{"d":"2025-12-19","c":"Office/General Administrative Expenses","a":19.2},{"d":"2025-12-19","c":"Auto","a":205.32},{"d":"2025-12-19","c":"Farm Store Expenses","a":274.9},{"d":"2025-12-19","c":"Highland Farms - Tiny house","a":113.13},{"d":"2025-12-19","c":"Labor - Tour Education","a":252.08},{"d":"2025-12-19","c":"Advertising/Promotional","a":332},{"d":"2025-12-19","c":"Animal care  - labor","a":580},{"d":"2025-12-19","c":"Cleaning Services - Labor","a":1175},{"d":"2025-12-19","c":"Repairs & Maintenance","a":1980},{"d":"2025-12-19","c":"Advertising/Promotional","a":10000},{"d":"2025-12-19","c":"Animal Supplies","a":280},{"d":"2025-12-19","c":"Highland Reserve - land improvement","a":2146.13},{"d":"2025-12-19","c":"Advertising/Promotional","a":174},{"d":"2025-12-18","c":"Spa - Installation","a":1414.75},{"d":"2025-12-18","c":"Auto","a":241.91},{"d":"2025-12-18","c":"Land Improvements","a":77},{"d":"2025-12-18","c":"Auto","a":77.14},{"d":"2025-12-18","c":"Auto","a":77.66},{"d":"2025-12-17","c":"Auto","a":31.1},{"d":"2025-12-17","c":"Auto","a":50.5},{"d":"2025-12-17","c":"Advertising/Promotional","a":875},{"d":"2025-12-16","c":"Meals & Entertainment","a":57.04},{"d":"2025-12-16","c":"Transient Occupancy Tax","a":3.85},{"d":"2025-12-16","c":"Transient Occupancy Tax","a":7.62},{"d":"2025-12-16","c":"Transient Occupancy Tax","a":18.53},{"d":"2025-12-16","c":"Office/General Administrative Expenses","a":19.2},{"d":"2025-12-16","c":"Transient Occupancy Tax","a":40.7},{"d":"2025-12-16","c":"Transient Occupancy Tax","a":137.91},{"d":"2025-12-16","c":"Transient Occupancy Tax","a":272.96},{"d":"2025-12-16","c":"Advertising/Promotional","a":500},{"d":"2025-12-16","c":"Auto","a":62.33},{"d":"2025-12-15","c":"Utilities","a":-135.73},{"d":"2025-12-15","c":"Cleaning Services - Hospitality Essentials","a":18.7},{"d":"2025-12-15","c":"Office/General Administrative Expenses","a":19.2},{"d":"2025-12-15","c":"Cleaning Services - Hospitality Essentials","a":19.64},{"d":"2025-12-15","c":"Cleaning Services - Hospitality Essentials","a":64.58},{"d":"2025-12-15","c":"Highland Farms - Hot tubs","a":84.98},{"d":"2025-12-15","c":"Labor - Farm Hand","a":4500},{"d":"2025-12-14","c":"Cleaning Services - Hospitality Essentials","a":102.24},{"d":"2025-12-14","c":"Auto","a":114.57},{"d":"2025-12-14","c":"Partner's Equity - Connor McWilliams","a":4917.22},{"d":"2025-12-14","c":"Livestock Feed","a":85.96},{"d":"2025-12-14","c":"Animal care  - labor","a":957},{"d":"2025-12-13","c":"Office/General Administrative Expenses","a":57.6},{"d":"2025-12-13","c":"Advertising/Promotional","a":126.67},{"d":"2025-12-12","c":"Office/General Administrative Expenses","a":20},{"d":"2025-12-12","c":"Website Expenses","a":29.99},{"d":"2025-12-12","c":"Advertising/Promotional","a":163},{"d":"2025-12-12","c":"Bank Charges","a":6.5},{"d":"2025-12-12","c":"Website Expenses","a":25.2},{"d":"2025-12-11","c":"Auto","a":16.15},{"d":"2025-12-11","c":"Auto","a":53.8},{"d":"2025-12-11","c":"Advertising/Promotional","a":122.06},{"d":"2025-12-11","c":"Advertising/Promotional","a":9004.56},{"d":"2025-12-11","c":"Advertising/Promotional","a":3135.34},{"d":"2025-12-11","c":"Advertising/Promotional","a":6822.79},{"d":"2025-12-10","c":"Highland Farms Lodge - Maintenance","a":94},{"d":"2025-12-10","c":"Auto","a":50.73},{"d":"2025-12-10","c":"Transfer","a":4999},{"d":"2025-12-09","c":"Cleaning Services - Hospitality Essentials","a":21.98},{"d":"2025-12-09","c":"Auto","a":14.38},{"d":"2025-12-09","c":"Highland Farms Cottage - Supplies","a":39.99},{"d":"2025-12-09","c":"Cleaning Services - Hospitality Essentials","a":38.22},{"d":"2025-12-09","c":"Highland Farms Cottage - Supplies","a":28.98},{"d":"2025-12-09","c":"Auto","a":111.28},{"d":"2025-12-09","c":"Highland Farms - Front Gate","a":1272.5},{"d":"2025-12-09","c":"Cleaning Services - Labor","a":735},{"d":"2025-12-09","c":"Labor - Tour Education","a":112.5},{"d":"2025-12-09","c":"Livestock Feed","a":380},{"d":"2025-12-09","c":"Highland Farms - Hot tubs","a":14},{"d":"2025-12-08","c":"Cleaning Services - Hospitality Essentials","a":37.98},{"d":"2025-12-08","c":"Equipment Rental","a":1104.32},{"d":"2025-12-08","c":"Spa - Installation","a":10197.4},{"d":"2025-12-08","c":"Auto","a":65},{"d":"2025-12-08","c":"Utilities","a":1331.21},{"d":"2025-12-08","c":"Meals & Entertainment","a":54.25},{"d":"2025-12-08","c":"Advertising/Promotional","a":37.37},{"d":"2025-12-08","c":"Animal care  - labor","a":200},{"d":"2025-12-08","c":"Animal care  - labor","a":987.5},{"d":"2025-12-08","c":"Advertising/Promotional","a":155.38},{"d":"2025-12-08","c":"Mortgage Payable - Newrez / Shellpoint","a":4676.67},{"d":"2025-12-08","c":"Advertising/Promotional","a":2710.5},{"d":"2025-12-08","c":"Advertising/Promotional","a":59.25},{"d":"2025-12-08","c":"Advertising/Promotional","a":230},{"d":"2025-12-07","c":"Cleaning Services - Hospitality Essentials","a":9.99},{"d":"2025-12-07","c":"Cleaning Services - Hospitality Essentials","a":94.56},{"d":"2025-12-07","c":"Advertising/Promotional","a":47.52},{"d":"2025-12-06","c":"Credit Card Processing","a":-17863.49},{"d":"2025-12-06","c":"Land Improvements","a":739.97},{"d":"2025-12-06","c":"Credit Card Processing","a":17863.49},{"d":"2025-12-06","c":"Advertising/Promotional","a":153},{"d":"2025-12-05","c":"Office/General Administrative Expenses","a":105.15},{"d":"2025-12-05","c":"Auto","a":94.53},{"d":"2025-12-04","c":"Animal care  - labor","a":2287.5},{"d":"2025-12-04","c":"Animal care  - labor","a":1903},{"d":"2025-12-04","c":"Cleaning Essentials","a":99.98},{"d":"2025-12-03","c":"Farm Store Expenses","a":218},{"d":"2025-12-02","c":"Auto","a":107.04},{"d":"2025-12-02","c":"Auto","a":63.09},{"d":"2025-12-01","c":"Cleaning Services - Labor","a":2375},{"d":"2025-12-01","c":"Spa - Installation","a":940},{"d":"2025-12-01","c":"Cleaning Services - Labor","a":732.5},{"d":"2025-12-01","c":"Utilities","a":95},{"d":"2025-12-01","c":"Highland Reserve - land improvement","a":507},{"d":"2025-12-01","c":"Website Expenses","a":7.2},{"d":"2025-11-30","c":"Advertising/Promotional","a":143},{"d":"2025-11-30","c":"Website Expenses","a":25},{"d":"2025-11-29","c":"Cleaning Services - Hospitality Essentials","a":47.97},{"d":"2025-11-29","c":"Office/General Administrative Expenses","a":38},{"d":"2025-11-28","c":"Farm Store Expenses","a":240},{"d":"2025-11-28","c":"Website Expenses","a":12},{"d":"2025-11-26","c":"Farm Management","a":4750},{"d":"2025-11-26","c":"Office/General Administrative Expenses","a":88.15},{"d":"2025-11-25","c":"Office/General Administrative Expenses","a":96},{"d":"2025-11-25","c":"Advertising/Promotional","a":33.98},{"d":"2025-11-25","c":"Auto","a":49.5},{"d":"2025-11-24","c":"Utilities","a":70.89},{"d":"2025-11-24","c":"Cleaning Services - Hospitality Essentials","a":493.78},{"d":"2025-11-23","c":"Office/General Administrative Expenses","a":45},{"d":"2025-11-23","c":"Office/General Administrative Expenses","a":45},{"d":"2025-11-22","c":"Advertising/Promotional","a":160},{"d":"2025-11-22","c":"Utilities","a":82.99},{"d":"2025-11-21","c":"Land Improvements","a":347.64},{"d":"2025-11-21","c":"Advertising/Promotional","a":89.73},{"d":"2025-11-20","c":"Cleaning Services - Hospitality Essentials","a":37.58},{"d":"2025-11-20","c":"Auto","a":104.12},{"d":"2025-11-19","c":"Advertising/Promotional","a":10.41},{"d":"2025-11-19","c":"Land Improvements","a":402.35},{"d":"2025-11-19","c":"Highland Farms - Hot tubs","a":14.29},{"d":"2025-11-19","c":"Pest Control","a":150},{"d":"2025-11-19","c":"Repairs & Maintenance","a":7165},{"d":"2025-11-18","c":"Advertising/Promotional","a":2150},{"d":"2025-11-17","c":"Office/General Administrative Expenses","a":76.8},{"d":"2025-11-17","c":"Advertising/Promotional","a":141.17},{"d":"2025-11-17","c":"Bank Charges","a":6.5},{"d":"2025-11-16","c":"Cleaning Services - Hospitality Essentials","a":32.99},{"d":"2025-11-15","c":"Highland Farms Lodge - Maintenance","a":69.99},{"d":"2025-11-15","c":"Animal Supplies","a":196.2},{"d":"2025-11-14","c":"Farm Store Expenses","a":706},{"d":"2025-11-14","c":"Animal care  - labor","a":1771},{"d":"2025-11-14","c":"Repairs & Maintenance","a":31.99},{"d":"2025-11-13","c":"Auto","a":108.65},{"d":"2025-11-13","c":"Animal care  - labor","a":1862.5},{"d":"2025-11-13","c":"Spa - Installation","a":652.5},{"d":"2025-11-13","c":"Advertising/Promotional","a":103.17},{"d":"2025-11-13","c":"Cleaning Services - Hospitality Essentials","a":111.92},{"d":"2025-11-12","c":"Office/General Administrative Expenses","a":20},{"d":"2025-11-12","c":"Website Expenses","a":29.99},{"d":"2025-11-12","c":"Spa - Installation","a":900},{"d":"2025-11-12","c":"Cleaning Services - Labor","a":877.5},{"d":"2025-11-12","c":"Labor - Tour Education","a":81.25},{"d":"2025-11-12","c":"Website Expenses","a":25.2},{"d":"2025-11-11","c":"Office/General Administrative Expenses","a":64},{"d":"2025-11-11","c":"Meals & Entertainment","a":103.57},{"d":"2025-11-11","c":"Meals & Entertainment","a":24.76},{"d":"2025-11-10","c":"Cleaning Essentials","a":-7.99},{"d":"2025-11-10","c":"Farm Store Expenses","a":-115.99},{"d":"2025-11-10","c":"Spa - Installation","a":6660},{"d":"2025-11-10","c":"Highland Farms - Hot tubs","a":27.48},{"d":"2025-11-09","c":"Cleaning Services - Hospitality Essentials","a":155.5},{"d":"2025-11-08","c":"Cleaning Services - Hospitality Essentials","a":14.6},{"d":"2025-11-08","c":"Supplies & Materials","a":165.16},{"d":"2025-11-07","c":"Farm Store Expenses","a":-62.99},{"d":"2025-11-07","c":"Insurance","a":2669},{"d":"2025-11-07","c":"Bank Charges","a":36},{"d":"2025-11-07","c":"Mortgage Payable - Newrez / Shellpoint","a":4676.67},{"d":"2025-11-07","c":"Office/General Administrative Expenses","a":57.6},{"d":"2025-11-07","c":"Cleaning Services - Hospitality Essentials","a":179.94},{"d":"2025-11-06","c":"Advertising/Promotional","a":115.99},{"d":"2025-11-06","c":"Advertising/Promotional","a":42.97},{"d":"2025-11-06","c":"Utilities","a":966.45},{"d":"2025-11-06","c":"Highland Farms - Hot tubs","a":62.99},{"d":"2025-11-05","c":"Highland Farms Lodge - Maintenance","a":7.99},{"d":"2025-11-04","c":"Repairs & Maintenance","a":183.39},{"d":"2025-11-04","c":"Advertising/Promotional","a":66.62},{"d":"2025-11-03","c":"Advertising/Promotional","a":99.5},{"d":"2025-11-03","c":"Utilities","a":8},{"d":"2025-11-02","c":"Highland Reserve - land improvement","a":2500},{"d":"2025-11-02","c":"Office/General Administrative Expenses","a":38.4},{"d":"2025-11-01","c":"Office/General Administrative Expenses","a":19.2},{"d":"2025-11-01","c":"Office/General Administrative Expenses","a":38.4},{"d":"2025-10-31","c":"Repairs & Maintenance","a":2500},{"d":"2025-10-31","c":"Auto","a":113.53},{"d":"2025-10-31","c":"Animal care  - labor","a":1238},{"d":"2025-10-31","c":"Repairs & Maintenance","a":105.17},{"d":"2025-10-31","c":"Utilities","a":95},{"d":"2025-10-31","c":"Bank Charges","a":2.8},{"d":"2025-10-31","c":"Office/General Administrative Expenses","a":19.2},{"d":"2025-10-31","c":"Website Expenses","a":25},{"d":"2025-10-30","c":"Advertising/Promotional","a":88.91},{"d":"2025-10-30","c":"Highland Reserve - land improvement","a":917},{"d":"2025-10-30","c":"Cleaning Services - Labor","a":1060},{"d":"2025-10-30","c":"Spa - Installation","a":999.25},{"d":"2025-10-30","c":"Labor - Tour Education","a":150},{"d":"2025-10-30","c":"Spa - Installation","a":88},{"d":"2025-10-30","c":"Office/General Administrative Expenses","a":46},{"d":"2025-10-30","c":"Labor - Tour Education","a":200},{"d":"2025-10-30","c":"Highland Farms Lodge - Maintenance","a":231.51},{"d":"2025-10-30","c":"Auto","a":26.95},{"d":"2025-10-30","c":"Auto","a":175},{"d":"2025-10-30","c":"Farm supplies","a":136.92},{"d":"2025-10-29","c":"Transient Occupancy Tax","a":1.98},{"d":"2025-10-29","c":"Transient Occupancy Tax","a":9.55},{"d":"2025-10-29","c":"Transient Occupancy Tax","a":71.07},{"d":"2025-10-29","c":"Highland Reserve - Business License","a":100},{"d":"2025-10-29","c":"Auto","a":130},{"d":"2025-10-29","c":"Animal Supplies","a":280},{"d":"2025-10-29","c":"Land Improvements","a":126}];
+
+    const fmt = n => '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    const today = new Date('2026-03-10');
+
+    function getRange(type) {
+      const y = today.getFullYear(), m = today.getMonth(), d = today.getDate();
+      const dow = today.getDay();
+      switch(type) {
+        case 'week': {
+          const s = new Date(today); s.setDate(d - dow);
+          return [s, today];
+        }
+        case 'month': return [new Date(y, m, 1), today];
+        case 'last-month': return [new Date(y, m-1, 1), new Date(y, m, 0)];
+        case 'quarter': {
+          const qm = m - (m % 3);
+          return [new Date(y, qm, 1), today];
+        }
+        case 'ytd': return [new Date(y, 0, 1), today];
+        case 'all': return [new Date('2025-01-01'), today];
+        case 'custom': {
+          const s = document.getElementById('startDate').value;
+          const e = document.getElementById('endDate').value;
+          return [new Date(s), new Date(e)];
+        }
+      }
+    }
+
+    function render(rangeType) {
+      const [start, end] = getRange(rangeType);
+      const filtered = DATA.filter(r => {
+        const d = new Date(r.d);
+        return d >= start && d <= end;
+      });
+
+      // Group by category
+      const cats = {};
+      filtered.forEach(r => {
+        if (!cats[r.c]) cats[r.c] = {total: 0, count: 0};
+        cats[r.c].total += r.a;
+        cats[r.c].count++;
+      });
+
+      const sorted = Object.entries(cats).sort((a, b) => b[1].total - a[1].total);
+      const grandTotal = sorted.reduce((s, [, v]) => s + v.total, 0);
+      const totalCount = filtered.length;
+
+      document.getElementById('grandTotal').textContent = fmt(grandTotal);
+      document.getElementById('txnCount').textContent = totalCount;
+
+      const labels = {
+        week: 'This Week', month: 'This Month', 'last-month': 'Last Month',
+        quarter: 'This Quarter', ytd: 'Year to Date', all: 'All Time',
+        custom: `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`
+      };
+      document.getElementById('periodLabel').textContent = labels[rangeType] || '';
+
+      const maxVal = sorted.length ? Math.max(...sorted.map(([,v]) => v.total)) : 1;
+      const container = document.getElementById('categories');
+      container.innerHTML = sorted.map(([cat, data]) => {
+        const pct = Math.max(0, (data.total / maxVal) * 100);
+        const isNeg = data.total < 0;
+        return `
+          <div class="cat-row">
+            <div class="cat-header">
+              <span class="cat-name">${cat}</span>
+              <span class="cat-meta">${data.count} txn${data.count !== 1 ? 's' : ''}</span>
+              <span class="cat-amount ${isNeg ? 'negative' : ''}">${isNeg ? '-' : ''}${fmt(data.total)}</span>
+            </div>
+            <div class="cat-bar-bg"><div class="cat-bar" style="width:${pct}%"></div></div>
+          </div>`;
+      }).join('');
+    }
+
+    // Filter button handlers
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render(btn.dataset.range);
+      });
+    });
+
+    render('all');
+  </script>
 </body>
 </html>
