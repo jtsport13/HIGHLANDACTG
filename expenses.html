@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Expenses - Highland Accounting</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .group-row { margin-bottom: 12px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
+    .group-header { display: flex; align-items: center; padding: 12px 16px; cursor: pointer; background: #f5f5f5; }
+    .group-header:hover { background: #eaeaea; }
+    .group-categories { padding: 0 12px 8px 12px; background: #fafafa; }
+    .group-categories .cat-row { border-left: 3px solid #ccc; margin-left: 8px; padding-left: 4px; }
+  </style>
 </head>
 <body>
   <div class="container wide">
@@ -44,6 +51,15 @@
     function fmt(n) { return '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
     var today = new Date('2026-03-10');
     var activeCat = null, currentRange = 'all';
+
+    var categoryGroups = {
+      'Farm & Animals': ['Animal Processing','Animal Supplies','Animal care  - labor','Barn Supplies','Farm Management','Farm Store Expenses','Farm supplies','Livestock Feed','Labor - Farm Hand','Labor - Tour Education'],
+      'Hospitality / Lodging': ['Cleaning Essentials','Cleaning Services','Cleaning Services - Hospitality Essentials','Cleaning Services - Labor','Highland Farms - Cow Craving','Highland Farms - Hot tubs','Highland Farms - Tiny house','Highland Farms Cottage - Maintenance','Highland Farms Cottage - Supplies','Highland Farms Lodge - Maintenance','Transient Occupancy Tax','Wedding/Event expenses'],
+      'Property & Maintenance': ['Highland Reserve - land improvement','Highland Farms - Front Gate','Highland Farms - Pasture','Land Improvements','Repairs & Maintenance','Equipment Rental','Forest lighting','Pest Control','Spa - Installation','Utilities'],
+      'Admin & Finance': ['Bank Charges','Chase Ink','Credit Card Processing','Insurance','Mortgage Payable - Newrez / Shellpoint','Office/General Administrative Expenses','PAL loan repayment',"Partner's Equity - Connor McWilliams",'Transfer'],
+      'Marketing & Other': ['Advertising/Promotional','Auto','Meals & Entertainment','Travel','Website Expenses','Highland Reserve - Business License','Supplies & Materials']
+    };
+    var activeGroup = null;
     var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbykJgblfWpZCgA_41HEizcNFcz3Nw-vgYQM6dPXDcQm_JnVcsYugEHxV1QOSLpWkxQ/exec';
     var edits = {};
     try { edits = JSON.parse(localStorage.getItem('hac_edits') || '{}'); } catch(e) {}
@@ -93,6 +109,14 @@
       return [new Date(document.getElementById('startDate').value),new Date(document.getElementById('endDate').value)];
     }
 
+    function getCatGroup(catName) {
+      var groups = Object.entries(categoryGroups);
+      for (var i = 0; i < groups.length; i++) {
+        if (groups[i][1].indexOf(catName) !== -1) return groups[i][0];
+      }
+      return 'Other';
+    }
+
     function render(rangeType) {
       currentRange = rangeType;
       var rng=getRange(rangeType), start=rng[0], end=rng[1];
@@ -106,27 +130,79 @@
       document.getElementById('txnCount').textContent=filtered.length;
       var labels={'last-week':'Last Week',month:'This Month','last-month':'Last Month',quarter:'This Quarter',ytd:'Year to Date',all:'All Time',custom:start.toLocaleDateString()+' - '+end.toLocaleDateString()};
       document.getElementById('periodLabel').textContent=labels[rangeType]||'';
-      var maxVal=sorted.length?Math.max.apply(null,sorted.map(function(x){return x[1].total;})):1;
-      var container=document.getElementById('categories');
-      container.innerHTML=sorted.map(function(entry){
-        var cat=entry[0],data=entry[1];
-        var pct=Math.max(0,(data.total/maxVal)*100), isNeg=data.total<0, isOpen=activeCat===cat;
-        var txnRows=data.txns.sort(function(a,b){return b.d.localeCompare(a.d);}).map(function(t){
-          var tNeg=t.a<0;
-          return '<tr><td>'+t.d+'</td><td>'+t.v.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\'/g,'&#39;')+'</td><td class="amount'+(tNeg?' negative':'')+'">'+( tNeg?'-':'')+fmt(t.a)+'</td></tr>';
-        }).join('');
-        return '<div class="cat-row"><div class="cat-header" data-cat="'+cat.replace(/"/g,'&quot;')+'">'
-          +'<span class="cat-toggle">'+(isOpen?'&#9660;':'&#9654;')+'</span>'
-          +'<span class="cat-name">'+cat+'</span>'
-          +'<span class="cat-meta">'+data.count+' txn'+(data.count!==1?'s':'')+'</span>'
-          +'<span class="cat-amount'+(isNeg?' negative':'')+'">'+( isNeg?'-':'')+fmt(data.total)+'</span>'
-          +'</div><div class="cat-bar-bg"><div class="cat-bar" style="width:'+pct+'%"></div></div>'
-          +(isOpen?'<div class="cat-detail"><table><thead><tr><th>Date</th><th>Payee</th><th class="amount">Amount</th></tr></thead><tbody>'+txnRows+'</tbody></table></div>':'')
-          +'</div>';
+
+      // Build groups
+      var groupData = {};
+      sorted.forEach(function(entry) {
+        var cat = entry[0], data = entry[1];
+        var grp = getCatGroup(cat);
+        if (!groupData[grp]) groupData[grp] = {total: 0, count: 0, cats: []};
+        groupData[grp].total += data.total;
+        groupData[grp].count += data.count;
+        groupData[grp].cats.push(entry);
+      });
+
+      // Sort groups by total descending
+      var groupOrder = Object.keys(categoryGroups).concat(['Other']);
+      var sortedGroups = groupOrder.filter(function(g){return groupData[g];});
+
+      var maxGroupVal = sortedGroups.length ? Math.max.apply(null, sortedGroups.map(function(g){return Math.abs(groupData[g].total);})) : 1;
+
+      var container = document.getElementById('categories');
+      container.innerHTML = sortedGroups.map(function(grpName) {
+        var grp = groupData[grpName];
+        var grpNeg = grp.total < 0;
+        var grpPct = Math.max(0, (Math.abs(grp.total) / maxGroupVal) * 100);
+        var grpOpen = activeGroup === grpName;
+
+        var catHtml = '';
+        if (grpOpen) {
+          var maxCatVal = grp.cats.length ? Math.max.apply(null, grp.cats.map(function(x){return Math.abs(x[1].total);})) : 1;
+          catHtml = '<div class="group-categories">' + grp.cats.map(function(entry) {
+            var cat = entry[0], data = entry[1];
+            var catPct = Math.max(0, (Math.abs(data.total) / maxCatVal) * 100);
+            var isNeg = data.total < 0, isOpen = activeCat === cat;
+            var txnRows = data.txns.sort(function(a,b){return b.d.localeCompare(a.d);}).map(function(t){
+              var tNeg = t.a < 0;
+              return '<tr><td>'+t.d+'</td><td>'+t.v.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\'/g,'&#39;')+'</td><td class="amount'+(tNeg?' negative':'')+'">'+( tNeg?'-':'')+fmt(t.a)+'</td></tr>';
+            }).join('');
+            return '<div class="cat-row"><div class="cat-header" data-cat="'+cat.replace(/"/g,'&quot;')+'">'
+              +'<span class="cat-toggle">'+(isOpen?'&#9660;':'&#9654;')+'</span>'
+              +'<span class="cat-name">'+cat+'</span>'
+              +'<span class="cat-meta">'+data.count+' txn'+(data.count!==1?'s':'')+'</span>'
+              +'<span class="cat-amount'+(isNeg?' negative':'')+'">'+( isNeg?'-':'')+fmt(data.total)+'</span>'
+              +'</div><div class="cat-bar-bg"><div class="cat-bar" style="width:'+catPct+'%"></div></div>'
+              +(isOpen?'<div class="cat-detail"><table><thead><tr><th>Date</th><th>Payee</th><th class="amount">Amount</th></tr></thead><tbody>'+txnRows+'</tbody></table></div>':'')
+              +'</div>';
+          }).join('') + '</div>';
+        }
+
+        return '<div class="group-row"><div class="group-header" data-group="'+grpName.replace(/"/g,'&quot;')+'">'
+          +'<span class="cat-toggle">'+(grpOpen?'&#9660;':'&#9654;')+'</span>'
+          +'<span class="cat-name" style="font-weight:700">'+grpName+'</span>'
+          +'<span class="cat-meta">'+grp.count+' txn'+(grp.count!==1?'s':'')+'</span>'
+          +'<span class="cat-amount'+(grpNeg?' negative':'')+'">'+( grpNeg?'-':'')+fmt(grp.total)+'</span>'
+          +'</div><div class="cat-bar-bg"><div class="cat-bar" style="width:'+grpPct+'%"></div></div>'
+          +catHtml+'</div>';
       }).join('');
-      var hdrs=container.getElementsByClassName('cat-header');
-      for(var i=0;i<hdrs.length;i++){
-        hdrs[i].onclick=(function(el){return function(){activeCat=activeCat===el.getAttribute('data-cat')?null:el.getAttribute('data-cat');render(currentRange);};})(hdrs[i]);
+
+      // Group header click handlers
+      var grpHdrs = container.getElementsByClassName('group-header');
+      for (var i = 0; i < grpHdrs.length; i++) {
+        grpHdrs[i].onclick = (function(el){return function(){
+          var g = el.getAttribute('data-group');
+          activeGroup = activeGroup === g ? null : g;
+          activeCat = null;
+          render(currentRange);
+        };})(grpHdrs[i]);
+      }
+      // Category header click handlers
+      var hdrs = container.getElementsByClassName('cat-header');
+      for (var i = 0; i < hdrs.length; i++) {
+        hdrs[i].onclick = (function(el){return function(){
+          activeCat = activeCat === el.getAttribute('data-cat') ? null : el.getAttribute('data-cat');
+          render(currentRange);
+        };})(hdrs[i]);
       }
     }
 
