@@ -44,7 +44,7 @@
     function fmt(n) { return '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
     var today = new Date('2026-03-10');
     var activeCat = null, currentRange = 'all';
-    var SCRIPT_URL = localStorage.getItem('hac_script_url') || '';
+    var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbykJgblfWpZCgA_41HEizcNFcz3Nw-vgYQM6dPXDcQm_JnVcsYugEHxV1QOSLpWkxQ/exec';
     var edits = {};
     try { edits = JSON.parse(localStorage.getItem('hac_edits') || '{}'); } catch(e) {}
 
