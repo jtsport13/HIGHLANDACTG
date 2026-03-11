@@ -20,12 +20,12 @@
     <p class="subtitle">Spending by category from QuickBooks</p>
 
     <div class="filters">
-      <button class="filter-btn" data-range="last-week">Last Week</button>
+      <button class="filter-btn active" data-range="last-week">Last Week</button>
       <button class="filter-btn" data-range="month">This Month</button>
       <button class="filter-btn" data-range="last-month">Last Month</button>
       <button class="filter-btn" data-range="quarter">This Quarter</button>
       <button class="filter-btn" data-range="ytd">Year to Date</button>
-      <button class="filter-btn active" data-range="all">All Time</button>
+      <button class="filter-btn" data-range="all">All Time</button>
       <div class="custom-range">
         <input type="date" id="startDate" value="2025-10-29">
         <span>to</span>
@@ -37,7 +37,7 @@
     <div class="summary-bar">
       <div class="summary-total">Total: <strong id="grandTotal">$0</strong></div>
       <div class="summary-count"><span id="txnCount">0</span> transactions</div>
-      <div class="summary-period" id="periodLabel">All Time</div>
+      <div class="summary-period" id="periodLabel">Last Week</div>
     </div>
 
     <div id="categories"></div>
@@ -50,7 +50,7 @@
 
     function fmt(n) { return '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
     var today = new Date('2026-03-10');
-    var activeCats = {}, currentRange = 'all';
+    var activeCats = {}, currentRange = 'last-week';
 
     var activeGroup = null;
     var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbykJgblfWpZCgA_41HEizcNFcz3Nw-vgYQM6dPXDcQm_JnVcsYugEHxV1QOSLpWkxQ/exec';
@@ -202,7 +202,7 @@
         btn.classList.add('active');activeCats={};render(btn.getAttribute('data-range'));
       };})(btns[i]);
     }
-    render('all');
+    render('last-week');
     loadEditsFromSheet();
 
   </script>
