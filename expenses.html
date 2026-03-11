@@ -64,12 +64,12 @@
       DATA.forEach(function(r) {
         if (splits[r.id] && splits[r.id].length > 0) {
           splits[r.id].forEach(function(s, idx) {
-            result.push({id: r.id + '_' + idx, d: s.d, v: s.v, c: s.c, a: s.a});
+            result.push({id: r.id + '_' + idx, d: s.d, v: s.v, c: s.c, a: s.a, g: s.g||r.g});
           });
         } else {
           var e = edits[r.id];
           if (!e) { result.push(r); }
-          else { result.push({id:r.id, d:e.d||r.d, v:e.v||r.v, c:e.c||r.c, a:r.a}); }
+          else { result.push({id:r.id, d:e.d||r.d, v:e.v||r.v, c:e.c||r.c, a:r.a, g:e.g||r.g}); }
         }
       });
       return result;

@@ -32,6 +32,7 @@
             <th>Date</th>
             <th>Payee</th>
             <th>Category</th>
+            <th>Group</th>
             <th class="amount">Amount</th>
           </tr>
         </thead>
@@ -60,6 +61,10 @@
       <div class="modal-field">
         <label for="modalCategory">Category</label>
         <select id="modalCategory"><option value="Advertising/Promotional">Advertising/Promotional</option><option value="Animal Processing">Animal Processing</option><option value="Animal Supplies">Animal Supplies</option><option value="Animal care  - labor">Animal care  - labor</option><option value="Auto">Auto</option><option value="Bank Charges">Bank Charges</option><option value="Barn Supplies">Barn Supplies</option><option value="Chase Ink">Chase Ink</option><option value="Cleaning Essentials">Cleaning Essentials</option><option value="Cleaning Services">Cleaning Services</option><option value="Cleaning Services - Hospitality Essentials">Cleaning Services - Hospitality Essentials</option><option value="Cleaning Services - Labor">Cleaning Services - Labor</option><option value="Credit Card Processing">Credit Card Processing</option><option value="Equipment Rental">Equipment Rental</option><option value="Farm Management">Farm Management</option><option value="Farm Store Expenses">Farm Store Expenses</option><option value="Farm supplies">Farm supplies</option><option value="Forest lighting">Forest lighting</option><option value="Highland Farms - Cow Craving">Highland Farms - Cow Craving</option><option value="Highland Farms - Front Gate">Highland Farms - Front Gate</option><option value="Highland Farms - Hot tubs">Highland Farms - Hot tubs</option><option value="Highland Farms - Pasture">Highland Farms - Pasture</option><option value="Highland Farms - Tiny house">Highland Farms - Tiny house</option><option value="Highland Farms Cottage - Maintenance">Highland Farms Cottage - Maintenance</option><option value="Highland Farms Cottage - Supplies">Highland Farms Cottage - Supplies</option><option value="Highland Farms Lodge - Maintenance">Highland Farms Lodge - Maintenance</option><option value="Highland Reserve - Business License">Highland Reserve - Business License</option><option value="Highland Reserve - land improvement">Highland Reserve - land improvement</option><option value="Insurance">Insurance</option><option value="Labor - Farm Hand">Labor - Farm Hand</option><option value="Labor - Tour Education">Labor - Tour Education</option><option value="Land Improvements">Land Improvements</option><option value="Livestock Feed">Livestock Feed</option><option value="Meals & Entertainment">Meals & Entertainment</option><option value="Mortgage Payable - Newrez / Shellpoint">Mortgage Payable - Newrez / Shellpoint</option><option value="Office/General Administrative Expenses">Office/General Administrative Expenses</option><option value="PAL loan repayment">PAL loan repayment</option><option value="Partner's Equity - Connor McWilliams">Partner's Equity - Connor McWilliams</option><option value="Pest Control">Pest Control</option><option value="Repairs & Maintenance">Repairs & Maintenance</option><option value="Spa - Installation">Spa - Installation</option><option value="Supplies & Materials">Supplies & Materials</option><option value="Transfer">Transfer</option><option value="Transient Occupancy Tax">Transient Occupancy Tax</option><option value="Travel">Travel</option><option value="Utilities">Utilities</option><option value="Website Expenses">Website Expenses</option><option value="Wedding/Event expenses">Wedding/Event expenses</option></select>
+      </div>
+      <div class="modal-field">
+        <label for="modalGroup">Group Override</label>
+        <select id="modalGroup"><option value="">(Default from category)</option><option value="Farm & Animals">Farm &amp; Animals</option><option value="Hospitality / Lodging">Hospitality / Lodging</option><option value="Property & Maintenance">Property &amp; Maintenance</option><option value="Admin & Finance">Admin &amp; Finance</option><option value="Marketing & Other">Marketing &amp; Other</option><option value="Other">Other</option></select>
       </div>
       <div class="modal-field">
         <label for="modalCustomCat">Or type a new category</label>
@@ -98,7 +103,7 @@ var baseData = [{"d":"2026-03-07","c":"Office/General Administrative Expenses","
     function syncEditToSheet(id) {
       if (!SCRIPT_URL) return;
       var e = edits[id];
-      var body = e ? {id: id, d: e.d || '', v: e.v || '', c: e.c || ''} : {id: id, delete: true};
+      var body = e ? {id: id, d: e.d || '', v: e.v || '', c: e.c || '', g: e.g || ''} : {id: id, delete: true};
       fetch(SCRIPT_URL, {method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'text/plain'}, body: JSON.stringify(body)});
     }
 
@@ -138,6 +143,7 @@ var baseData = [{"d":"2026-03-07","c":"Office/General Administrative Expenses","
           '<td>' + r.d + '</td>' +
           '<td>' + r.v.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\'/g,'&#39;') + '</td>' +
           '<td class="cat-cell">' + r.c + (splits[r.id] ? ' <span class="edit-badge" style="background:#e3f2fd;color:#1565c0;">split</span>' : (r._edited ? ' <span class="edit-badge">edited</span>' : '')) + '</td>' +
+          '<td>' + ((edits[r.id] && edits[r.id].g) || r.g || '') + '</td>' +
           '<td class="amount' + (isNeg ? ' negative' : '') + '">' + (isNeg ? '-' : '') + fmt(r.a) + '</td></tr>';
       }
       document.getElementById('txnBody').innerHTML = html;
@@ -161,6 +167,8 @@ var baseData = [{"d":"2026-03-07","c":"Office/General Administrative Expenses","
       } else {
         document.getElementById('modalCustomCat').value = '';
       }
+      var grpSel = document.getElementById('modalGroup');
+      grpSel.value = (edits[id] && edits[id].g) ? edits[id].g : '';
       document.getElementById('editModal').className = 'modal';
       document.getElementById('editModal').setAttribute('data-id', id);
     }
@@ -180,10 +188,12 @@ var baseData = [{"d":"2026-03-07","c":"Office/General Administrative Expenses","
       var newPayee = document.getElementById('modalPayee').value.trim();
       var custom = document.getElementById('modalCustomCat').value.trim();
       var newCat = custom || document.getElementById('modalCategory').value;
+      var newGroup = document.getElementById('modalGroup').value;
       var changed = {};
       if (newDate !== orig.d) changed.d = newDate;
       if (newPayee !== orig.v) changed.v = newPayee;
       if (newCat !== orig.c) changed.c = newCat;
+      if (newGroup) changed.g = newGroup;
       if (Object.keys(changed).length > 0) {
         edits[id] = changed;
       } else {
