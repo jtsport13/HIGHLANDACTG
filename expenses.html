@@ -39,73 +39,76 @@
   </div>
 
   <script>
-    let DATA = [];
-    const fmt = n => '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-    const today = new Date('2026-03-10');
-    let activeCat = null;
-    let currentRange = 'all';
+    var DATA = [];
+    var fmt = function(n) { return '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); };
+    var today = new Date('2026-03-10');
+    var activeCat = null;
+    var currentRange = 'all';
 
     function applyEdits(data) {
-      const edits = JSON.parse(localStorage.getItem('hac_edits') || '{}');
-      return data.map(r => {
-        if (edits[r.id] && edits[r.id].c) return {...r, c: edits[r.id].c};
-        return r;
+      var edits = {};
+      try { edits = JSON.parse(localStorage.getItem('hac_edits') || '{}'); } catch(e) {}
+      return data.map(function(r) {
+        var e = edits[r.id];
+        if (!e) return r;
+        return {id: r.id, d: e.d || r.d, v: e.v || r.v, c: e.c || r.c, a: r.a};
       });
     }
 
     function getRange(type) {
-      const y = today.getFullYear(), m = today.getMonth(), d = today.getDate();
-      const dow = today.getDay();
+      var y = today.getFullYear(), m = today.getMonth(), d = today.getDate();
+      var dow = today.getDay();
       switch(type) {
-        case 'week': { const s = new Date(today); s.setDate(d - dow); return [s, today]; }
+        case 'week': var s = new Date(today); s.setDate(d - dow); return [s, today];
         case 'month': return [new Date(y, m, 1), today];
         case 'last-month': return [new Date(y, m-1, 1), new Date(y, m, 0)];
-        case 'quarter': { const qm = m - (m % 3); return [new Date(y, qm, 1), today]; }
+        case 'quarter': var qm = m - (m % 3); return [new Date(y, qm, 1), today];
         case 'ytd': return [new Date(y, 0, 1), today];
         case 'all': return [new Date('2025-01-01'), today];
-        case 'custom': {
+        case 'custom':
           return [new Date(document.getElementById('startDate').value), new Date(document.getElementById('endDate').value)];
-        }
       }
     }
 
     function render(rangeType) {
       currentRange = rangeType;
-      const [start, end] = getRange(rangeType);
-      const edited = applyEdits(DATA);
-      const filtered = edited.filter(r => { const d = new Date(r.d); return d >= start && d <= end; });
+      var range = getRange(rangeType);
+      var start = range[0], end = range[1];
+      var edited = applyEdits(DATA);
+      var filtered = edited.filter(function(r) { var d = new Date(r.d); return d >= start && d <= end; });
 
-      const cats = {};
-      filtered.forEach(r => {
+      var cats = {};
+      filtered.forEach(function(r) {
         if (!cats[r.c]) cats[r.c] = {total: 0, count: 0, txns: []};
         cats[r.c].total += r.a;
         cats[r.c].count++;
         cats[r.c].txns.push(r);
       });
 
-      const sorted = Object.entries(cats).sort((a, b) => b[1].total - a[1].total);
-      const grandTotal = sorted.reduce((s, [, v]) => s + v.total, 0);
+      var sorted = Object.entries(cats).sort(function(a, b) { return b[1].total - a[1].total; });
+      var grandTotal = sorted.reduce(function(s, x) { return s + x[1].total; }, 0);
 
       document.getElementById('grandTotal').textContent = fmt(grandTotal);
       document.getElementById('txnCount').textContent = filtered.length;
 
-      const labels = {
+      var labels = {
         week: 'This Week', month: 'This Month', 'last-month': 'Last Month',
         quarter: 'This Quarter', ytd: 'Year to Date', all: 'All Time',
         custom: start.toLocaleDateString() + ' - ' + end.toLocaleDateString()
       };
       document.getElementById('periodLabel').textContent = labels[rangeType] || '';
 
-      const maxVal = sorted.length ? Math.max(...sorted.map(([,v]) => v.total)) : 1;
-      const container = document.getElementById('categories');
-      container.innerHTML = sorted.map(([cat, data]) => {
-        const pct = Math.max(0, (data.total / maxVal) * 100);
-        const isNeg = data.total < 0;
-        const isOpen = activeCat === cat;
-        const txnRows = data.txns
-          .sort((a, b) => b.d.localeCompare(a.d))
-          .map(t => {
-            const tNeg = t.a < 0;
+      var maxVal = sorted.length ? Math.max.apply(null, sorted.map(function(x) { return x[1].total; })) : 1;
+      var container = document.getElementById('categories');
+      container.innerHTML = sorted.map(function(entry) {
+        var cat = entry[0], data = entry[1];
+        var pct = Math.max(0, (data.total / maxVal) * 100);
+        var isNeg = data.total < 0;
+        var isOpen = activeCat === cat;
+        var txnRows = data.txns
+          .sort(function(a, b) { return b.d.localeCompare(a.d); })
+          .map(function(t) {
+            var tNeg = t.a < 0;
             return '<tr><td>' + t.d + '</td><td>' + t.v.replace(/'/g, '&#39;') + '</td><td class="amount ' + (tNeg ? 'negative' : '') + '">' + (tNeg ? '-' : '') + fmt(t.a) + '</td></tr>';
           }).join('');
 
@@ -121,26 +124,32 @@
         '</div>';
       }).join('');
 
-      container.querySelectorAll('.cat-header').forEach(el => {
-        el.addEventListener('click', () => {
-          activeCat = activeCat === el.dataset.cat ? null : el.dataset.cat;
-          render(currentRange);
-        });
-      });
+      var headers = container.querySelectorAll('.cat-header');
+      for (var i = 0; i < headers.length; i++) {
+        (function(el) {
+          el.addEventListener('click', function() {
+            activeCat = activeCat === el.getAttribute('data-cat') ? null : el.getAttribute('data-cat');
+            render(currentRange);
+          });
+        })(headers[i]);
+      }
     }
 
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        activeCat = null;
-        render(btn.dataset.range);
-      });
-    });
+    var filterBtns = document.querySelectorAll('.filter-btn');
+    for (var i = 0; i < filterBtns.length; i++) {
+      (function(btn) {
+        btn.addEventListener('click', function() {
+          for (var j = 0; j < filterBtns.length; j++) filterBtns[j].classList.remove('active');
+          btn.classList.add('active');
+          activeCat = null;
+          render(btn.getAttribute('data-range'));
+        });
+      })(filterBtns[i]);
+    }
 
     fetch('data/expenses.json')
-      .then(r => r.json())
-      .then(data => { DATA = data; render('all'); });
+      .then(function(r) { return r.json(); })
+      .then(function(data) { DATA = data; render('all'); });
   </script>
 </body>
 </html>

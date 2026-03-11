@@ -10,7 +10,7 @@
   <div class="container wide">
     <a href="index.html" class="back">&larr; Back to Home</a>
     <h1>Manage Transactions</h1>
-    <p class="subtitle">Click a transaction to edit its category</p>
+    <p class="subtitle">Click a transaction to edit it</p>
 
     <div class="manage-toolbar">
       <div class="manage-search">
@@ -44,12 +44,12 @@
     <div class="modal-content">
       <h3>Edit Transaction</h3>
       <div class="modal-field">
-        <label>Date</label>
-        <span id="modalDate"></span>
+        <label for="modalDate">Date</label>
+        <input type="date" id="modalDate">
       </div>
       <div class="modal-field">
-        <label>Payee</label>
-        <span id="modalPayee"></span>
+        <label for="modalPayee">Payee</label>
+        <input type="text" id="modalPayee">
       </div>
       <div class="modal-field">
         <label>Amount</label>
@@ -71,17 +71,26 @@
   </div>
 
   <script>
-    const fmt = n => '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-    let baseData = [];
-    let edits = JSON.parse(localStorage.getItem('hac_edits') || '{}');
+    var fmt = function(n) { return '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); };
+    var baseData = [];
+    var edits = {};
+
+    try {
+      edits = JSON.parse(localStorage.getItem('hac_edits') || '{}');
+    } catch(e) {
+      edits = {};
+    }
+
+    function applyEdits(r) {
+      var e = edits[r.id];
+      if (!e) return r;
+      var out = {id: r.id, d: e.d || r.d, v: e.v || r.v, c: e.c || r.c, a: r.a};
+      out._edited = (out.d !== r.d || out.v !== r.v || out.c !== r.c);
+      return out;
+    }
 
     function getEditedData() {
-      return baseData.map(r => {
-        if (edits[r.id] && edits[r.id].c) {
-          return {...r, c: edits[r.id].c, _edited: true};
-        }
-        return r;
-      });
+      return baseData.map(applyEdits);
     }
 
     function saveEdits() {
@@ -90,76 +99,111 @@
     }
 
     function renderTable(filter) {
-      const data = getEditedData();
-      const q = (filter || '').toLowerCase();
-      const filtered = q ? data.filter(r =>
-        r.v.toLowerCase().includes(q) ||
-        r.c.toLowerCase().includes(q) ||
-        r.a.toString().includes(q) ||
-        r.d.includes(q)
-      ) : data;
+      var data = getEditedData();
+      var q = (filter || '').toLowerCase();
+      var filtered = q ? data.filter(function(r) {
+        return r.v.toLowerCase().indexOf(q) !== -1 ||
+          r.c.toLowerCase().indexOf(q) !== -1 ||
+          r.a.toString().indexOf(q) !== -1 ||
+          r.d.indexOf(q) !== -1;
+      }) : data;
 
-      const tbody = document.getElementById('txnBody');
-      tbody.innerHTML = filtered.map(r => {
-        const isNeg = r.a < 0;
-        const edited = r._edited ? ' edited' : '';
-        return '<tr class="txn-row' + edited + '" data-id="' + r.id + '">' +
+      var tbody = document.getElementById('txnBody');
+      var html = '';
+      for (var i = 0; i < filtered.length; i++) {
+        var r = filtered[i];
+        var isNeg = r.a < 0;
+        var edited = r._edited ? ' edited' : '';
+        var badge = r._edited ? ' <span class="edit-badge">edited</span>' : '';
+        html += '<tr class="txn-row' + edited + '" data-id="' + r.id + '">' +
           '<td>' + r.d + '</td>' +
           '<td>' + r.v.replace(/'/g, '&#39;') + '</td>' +
-          '<td class="cat-cell">' + r.c + (r._edited ? ' <span class="edit-badge">edited</span>' : '') + '</td>' +
+          '<td class="cat-cell">' + r.c + badge + '</td>' +
           '<td class="amount ' + (isNeg ? 'negative' : '') + '">' + (isNeg ? '-' : '') + fmt(r.a) + '</td>' +
         '</tr>';
-      }).join('');
+      }
+      tbody.innerHTML = html;
 
-      tbody.querySelectorAll('.txn-row').forEach(row => {
-        row.addEventListener('click', () => openModal(parseInt(row.dataset.id)));
-      });
+      var rows = tbody.querySelectorAll('.txn-row');
+      for (var j = 0; j < rows.length; j++) {
+        (function(row) {
+          row.addEventListener('click', function() {
+            openModal(parseInt(row.getAttribute('data-id')));
+          });
+        })(rows[j]);
+      }
     }
 
     function openModal(id) {
-      const r = getEditedData().find(x => x.id === id);
+      var r = getEditedData().filter(function(x) { return x.id === id; })[0];
       if (!r) return;
-      document.getElementById('modalDate').textContent = r.d;
-      document.getElementById('modalPayee').textContent = r.v;
+      document.getElementById('modalDate').value = r.d;
+      document.getElementById('modalPayee').value = r.v;
       document.getElementById('modalAmount').textContent = (r.a < 0 ? '-' : '') + fmt(r.a);
       document.getElementById('modalCategory').value = r.c;
       document.getElementById('modalCustomCat').value = '';
-      document.getElementById('editModal').classList.remove('hidden');
-      document.getElementById('editModal').dataset.id = id;
+
+      // If category not in dropdown, put it in custom field
+      var sel = document.getElementById('modalCategory');
+      var found = false;
+      for (var i = 0; i < sel.options.length; i++) {
+        if (sel.options[i].value === r.c) { found = true; break; }
+      }
+      if (!found) {
+        document.getElementById('modalCustomCat').value = r.c;
+      }
+
+      var modal = document.getElementById('editModal');
+      modal.classList.remove('hidden');
+      modal.setAttribute('data-id', id);
     }
 
-    document.getElementById('modalCancel').addEventListener('click', () => {
+    document.getElementById('modalCancel').addEventListener('click', function() {
       document.getElementById('editModal').classList.add('hidden');
     });
 
-    document.getElementById('modalSave').addEventListener('click', () => {
-      const id = parseInt(document.getElementById('editModal').dataset.id);
-      const custom = document.getElementById('modalCustomCat').value.trim();
-      const selected = document.getElementById('modalCategory').value;
-      const newCat = custom || selected;
-      const original = baseData.find(r => r.id === id);
+    document.getElementById('modalSave').addEventListener('click', function() {
+      var modal = document.getElementById('editModal');
+      var id = parseInt(modal.getAttribute('data-id'));
+      var newDate = document.getElementById('modalDate').value;
+      var newPayee = document.getElementById('modalPayee').value.trim();
+      var custom = document.getElementById('modalCustomCat').value.trim();
+      var selected = document.getElementById('modalCategory').value;
+      var newCat = custom || selected;
 
-      if (original && newCat !== original.c) {
-        edits[id] = {c: newCat};
-      } else {
-        delete edits[id];
+      var original = null;
+      for (var i = 0; i < baseData.length; i++) {
+        if (baseData[i].id === id) { original = baseData[i]; break; }
       }
+
+      if (original) {
+        var hasChanges = (newDate !== original.d || newPayee !== original.v || newCat !== original.c);
+        if (hasChanges) {
+          edits[id] = {};
+          if (newDate !== original.d) edits[id].d = newDate;
+          if (newPayee !== original.v) edits[id].v = newPayee;
+          if (newCat !== original.c) edits[id].c = newCat;
+        } else {
+          delete edits[id];
+        }
+      }
+
       saveEdits();
-      document.getElementById('editModal').classList.add('hidden');
+      modal.classList.add('hidden');
       renderTable(document.getElementById('searchBox').value);
     });
 
-    document.getElementById('editModal').addEventListener('click', (e) => {
+    document.getElementById('editModal').addEventListener('click', function(e) {
       if (e.target.id === 'editModal') {
         document.getElementById('editModal').classList.add('hidden');
       }
     });
 
-    document.getElementById('searchBox').addEventListener('input', (e) => {
+    document.getElementById('searchBox').addEventListener('input', function(e) {
       renderTable(e.target.value);
     });
 
-    document.getElementById('resetBtn').addEventListener('click', () => {
+    document.getElementById('resetBtn').addEventListener('click', function() {
       if (confirm('Reset all edits? This cannot be undone.')) {
         edits = {};
         saveEdits();
@@ -167,11 +211,11 @@
       }
     });
 
-    document.getElementById('exportBtn').addEventListener('click', () => {
-      const data = getEditedData();
-      const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+    document.getElementById('exportBtn').addEventListener('click', function() {
+      var data = getEditedData();
+      var blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
       a.href = url;
       a.download = 'expenses-edited.json';
       a.click();
@@ -180,11 +224,14 @@
 
     // Load data
     fetch('data/expenses.json')
-      .then(r => r.json())
-      .then(data => {
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
         baseData = data;
         saveEdits();
         renderTable();
+      })
+      .catch(function(err) {
+        document.getElementById('txnBody').innerHTML = '<tr><td colspan="4">Error loading data: ' + err.message + '</td></tr>';
       });
   </script>
 </body>
