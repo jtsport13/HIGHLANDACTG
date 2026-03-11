@@ -21,10 +21,21 @@ body {
   text-align: center;
 }
 
+.container.wide {
+  max-width: 960px;
+  text-align: left;
+}
+
 h1 {
   font-size: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
   color: #1a1a2e;
+}
+
+.subtitle {
+  color: #888;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
 }
 
 nav {
@@ -72,6 +83,58 @@ nav {
 
 .back:hover {
   color: #1a1a2e;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  margin-bottom: 1rem;
+}
+
+thead {
+  background: #1a1a2e;
+  color: #fff;
+}
+
+th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.9rem;
+}
+
+tbody tr:hover {
+  background: #fafafa;
+}
+
+tfoot td {
+  padding: 0.75rem 1rem;
+  background: #f9f9f9;
+  border-top: 2px solid #e0e0e0;
+}
+
+.amount {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.footer-note {
+  text-align: center;
+  color: #aaa;
+  font-size: 0.8rem;
+  margin-top: 1rem;
 }
 
 p {
