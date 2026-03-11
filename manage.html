@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Data - Highland Accounting</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container wide">
+    <a href="index.html" class="back">&larr; Back to Home</a>
+    <h1>Manage Transactions</h1>
+    <p class="subtitle">Click a transaction to edit its category</p>
+
+    <div class="manage-toolbar">
+      <div class="manage-search">
+        <input type="text" id="searchBox" placeholder="Search by payee, category, or amount...">
+      </div>
+      <div class="manage-info">
+        <span id="editCount">0</span> edits &middot;
+        <button class="filter-btn" id="resetBtn">Reset All Edits</button>
+        <button class="filter-btn" id="exportBtn">Export Edits</button>
+      </div>
+    </div>
+
+    <div class="manage-table-wrap">
+      <table id="txnTable">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Payee</th>
+            <th>Category</th>
+            <th class="amount">Amount</th>
+          </tr>
+        </thead>
+        <tbody id="txnBody"></tbody>
+      </table>
+    </div>
+
+    <p class="footer-note">Edits are saved in your browser &middot; They apply to the Expenses page too</p>
+  </div>
+
+  <div id="editModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Edit Transaction</h3>
+      <div class="modal-field">
+        <label>Date</label>
+        <span id="modalDate"></span>
+      </div>
+      <div class="modal-field">
+        <label>Payee</label>
+        <span id="modalPayee"></span>
+      </div>
+      <div class="modal-field">
+        <label>Amount</label>
+        <span id="modalAmount"></span>
+      </div>
+      <div class="modal-field">
+        <label for="modalCategory">Category</label>
+        <select id="modalCategory"><option value="Advertising/Promotional">Advertising/Promotional</option><option value="Animal Processing">Animal Processing</option><option value="Animal Supplies">Animal Supplies</option><option value="Animal care  - labor">Animal care  - labor</option><option value="Auto">Auto</option><option value="Bank Charges">Bank Charges</option><option value="Barn Supplies">Barn Supplies</option><option value="Chase Ink">Chase Ink</option><option value="Cleaning Essentials">Cleaning Essentials</option><option value="Cleaning Services">Cleaning Services</option><option value="Cleaning Services - Hospitality Essentials">Cleaning Services - Hospitality Essentials</option><option value="Cleaning Services - Labor">Cleaning Services - Labor</option><option value="Credit Card Processing">Credit Card Processing</option><option value="Equipment Rental">Equipment Rental</option><option value="Farm Management">Farm Management</option><option value="Farm Store Expenses">Farm Store Expenses</option><option value="Farm supplies">Farm supplies</option><option value="Forest lighting">Forest lighting</option><option value="Highland Farms - Cow Craving">Highland Farms - Cow Craving</option><option value="Highland Farms - Front Gate">Highland Farms - Front Gate</option><option value="Highland Farms - Hot tubs">Highland Farms - Hot tubs</option><option value="Highland Farms - Pasture">Highland Farms - Pasture</option><option value="Highland Farms - Tiny house">Highland Farms - Tiny house</option><option value="Highland Farms Cottage - Maintenance">Highland Farms Cottage - Maintenance</option><option value="Highland Farms Cottage - Supplies">Highland Farms Cottage - Supplies</option><option value="Highland Farms Lodge - Maintenance">Highland Farms Lodge - Maintenance</option><option value="Highland Reserve - Business License">Highland Reserve - Business License</option><option value="Highland Reserve - land improvement">Highland Reserve - land improvement</option><option value="Insurance">Insurance</option><option value="Labor - Farm Hand">Labor - Farm Hand</option><option value="Labor - Tour Education">Labor - Tour Education</option><option value="Land Improvements">Land Improvements</option><option value="Livestock Feed">Livestock Feed</option><option value="Meals & Entertainment">Meals & Entertainment</option><option value="Mortgage Payable - Newrez / Shellpoint">Mortgage Payable - Newrez / Shellpoint</option><option value="Office/General Administrative Expenses">Office/General Administrative Expenses</option><option value="PAL loan repayment">PAL loan repayment</option><option value="Partner's Equity - Connor McWilliams">Partner's Equity - Connor McWilliams</option><option value="Pest Control">Pest Control</option><option value="Repairs & Maintenance">Repairs & Maintenance</option><option value="Spa - Installation">Spa - Installation</option><option value="Supplies & Materials">Supplies & Materials</option><option value="Transfer">Transfer</option><option value="Transient Occupancy Tax">Transient Occupancy Tax</option><option value="Travel">Travel</option><option value="Utilities">Utilities</option><option value="Website Expenses">Website Expenses</option><option value="Wedding/Event expenses">Wedding/Event expenses</option></select>
+      </div>
+      <div class="modal-field">
+        <label for="modalCustomCat">Or type a new category</label>
+        <input type="text" id="modalCustomCat" placeholder="Leave blank to use dropdown">
+      </div>
+      <div class="modal-actions">
+        <button class="filter-btn" id="modalCancel">Cancel</button>
+        <button class="filter-btn active" id="modalSave">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fmt = n => '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    let baseData = [];
+    let edits = JSON.parse(localStorage.getItem('hac_edits') || '{}');
+
+    function getEditedData() {
+      return baseData.map(r => {
+        if (edits[r.id] && edits[r.id].c) {
+          return {...r, c: edits[r.id].c, _edited: true};
+        }
+        return r;
+      });
+    }
+
+    function saveEdits() {
+      localStorage.setItem('hac_edits', JSON.stringify(edits));
+      document.getElementById('editCount').textContent = Object.keys(edits).length;
+    }
+
+    function renderTable(filter) {
+      const data = getEditedData();
+      const q = (filter || '').toLowerCase();
+      const filtered = q ? data.filter(r =>
+        r.v.toLowerCase().includes(q) ||
+        r.c.toLowerCase().includes(q) ||
+        r.a.toString().includes(q) ||
+        r.d.includes(q)
+      ) : data;
+
+      const tbody = document.getElementById('txnBody');
+      tbody.innerHTML = filtered.map(r => {
+        const isNeg = r.a < 0;
+        const edited = r._edited ? ' edited' : '';
+        return '<tr class="txn-row' + edited + '" data-id="' + r.id + '">' +
+          '<td>' + r.d + '</td>' +
+          '<td>' + r.v.replace(/'/g, '&#39;') + '</td>' +
+          '<td class="cat-cell">' + r.c + (r._edited ? ' <span class="edit-badge">edited</span>' : '') + '</td>' +
+          '<td class="amount ' + (isNeg ? 'negative' : '') + '">' + (isNeg ? '-' : '') + fmt(r.a) + '</td>' +
+        '</tr>';
+      }).join('');
+
+      tbody.querySelectorAll('.txn-row').forEach(row => {
+        row.addEventListener('click', () => openModal(parseInt(row.dataset.id)));
+      });
+    }
+
+    function openModal(id) {
+      const r = getEditedData().find(x => x.id === id);
+      if (!r) return;
+      document.getElementById('modalDate').textContent = r.d;
+      document.getElementById('modalPayee').textContent = r.v;
+      document.getElementById('modalAmount').textContent = (r.a < 0 ? '-' : '') + fmt(r.a);
+      document.getElementById('modalCategory').value = r.c;
+      document.getElementById('modalCustomCat').value = '';
+      document.getElementById('editModal').classList.remove('hidden');
+      document.getElementById('editModal').dataset.id = id;
+    }
+
+    document.getElementById('modalCancel').addEventListener('click', () => {
+      document.getElementById('editModal').classList.add('hidden');
+    });
+
+    document.getElementById('modalSave').addEventListener('click', () => {
+      const id = parseInt(document.getElementById('editModal').dataset.id);
+      const custom = document.getElementById('modalCustomCat').value.trim();
+      const selected = document.getElementById('modalCategory').value;
+      const newCat = custom || selected;
+      const original = baseData.find(r => r.id === id);
+
+      if (original && newCat !== original.c) {
+        edits[id] = {c: newCat};
+      } else {
+        delete edits[id];
+      }
+      saveEdits();
+      document.getElementById('editModal').classList.add('hidden');
+      renderTable(document.getElementById('searchBox').value);
+    });
+
+    document.getElementById('editModal').addEventListener('click', (e) => {
+      if (e.target.id === 'editModal') {
+        document.getElementById('editModal').classList.add('hidden');
+      }
+    });
+
+    document.getElementById('searchBox').addEventListener('input', (e) => {
+      renderTable(e.target.value);
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (confirm('Reset all edits? This cannot be undone.')) {
+        edits = {};
+        saveEdits();
+        renderTable(document.getElementById('searchBox').value);
+      }
+    });
+
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const data = getEditedData();
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'expenses-edited.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Load data
+    fetch('data/expenses.json')
+      .then(r => r.json())
+      .then(data => {
+        baseData = data;
+        saveEdits();
+        renderTable();
+      });
+  </script>
+</body>
+</html>
