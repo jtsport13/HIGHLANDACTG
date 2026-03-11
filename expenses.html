@@ -13,7 +13,7 @@
     <p class="subtitle">Spending by category from QuickBooks</p>
 
     <div class="filters">
-      <button class="filter-btn" data-range="week">This Week</button>
+      <button class="filter-btn" data-range="last-week">Last Week</button>
       <button class="filter-btn" data-range="month">This Month</button>
       <button class="filter-btn" data-range="last-month">Last Month</button>
       <button class="filter-btn" data-range="quarter">This Quarter</button>
@@ -84,7 +84,7 @@
 
     function getRange(type) {
       var y=today.getFullYear(), m=today.getMonth(), d=today.getDate(), dow=today.getDay();
-      if (type==='week') { var s=new Date(today); s.setDate(d-dow); return [s,today]; }
+      if (type==='last-week') { var s=new Date(today); s.setDate(d-dow-7); var e=new Date(today); e.setDate(d-dow-1); return [s,e]; }
       if (type==='month') return [new Date(y,m,1),today];
       if (type==='last-month') return [new Date(y,m-1,1),new Date(y,m,0)];
       if (type==='quarter') return [new Date(y,m-(m%3),1),today];
@@ -104,7 +104,7 @@
       var grandTotal=sorted.reduce(function(s,x){return s+x[1].total;},0);
       document.getElementById('grandTotal').textContent=fmt(grandTotal);
       document.getElementById('txnCount').textContent=filtered.length;
-      var labels={week:'This Week',month:'This Month','last-month':'Last Month',quarter:'This Quarter',ytd:'Year to Date',all:'All Time',custom:start.toLocaleDateString()+' - '+end.toLocaleDateString()};
+      var labels={'last-week':'Last Week',month:'This Month','last-month':'Last Month',quarter:'This Quarter',ytd:'Year to Date',all:'All Time',custom:start.toLocaleDateString()+' - '+end.toLocaleDateString()};
       document.getElementById('periodLabel').textContent=labels[rangeType]||'';
       var maxVal=sorted.length?Math.max.apply(null,sorted.map(function(x){return x[1].total;})):1;
       var container=document.getElementById('categories');
