@@ -91,6 +91,30 @@
         .catch(function() {});
     }
 
+
+    function loadGroupsFromSheet() {
+      var url = 'https://docs.google.com/spreadsheets/d/1Ys4zP0fqw8wMERQbv0Xwcri-svNHUKbxs71QzYQVLM8/export?format=csv&gid=1429775576';
+      fetch(url)
+        .then(function(r) { return r.text(); })
+        .then(function(csv) {
+          var lines = csv.split('\n');
+          var groupMap = {};
+          for (var i = 1; i < lines.length; i++) {
+            var cols = lines[i].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+            if (cols && cols.length >= 2) {
+              var cat = cols[0].replace(/^"|"$/g, '').trim();
+              var grp = cols[1].replace(/^"|"$/g, '').trim();
+              if (cat && grp) groupMap[cat] = grp;
+            }
+          }
+          DATA.forEach(function(r) {
+            if (groupMap[r.c]) r.g = groupMap[r.c];
+          });
+          render(currentRange);
+        })
+        .catch(function(e) { console.log('Groups fetch failed, using embedded groups:', e); });
+    }
+
     function getRange(type) {
       var y=today.getFullYear(), m=today.getMonth(), d=today.getDate(), dow=today.getDay();
       if (type==='last-week') { var s=new Date(today); s.setDate(d-dow-7); var e=new Date(today); e.setDate(d-dow-1); return [s,e]; }
@@ -204,6 +228,7 @@
     }
     render('last-week');
     loadEditsFromSheet();
+    loadGroupsFromSheet();
 
   </script>
 </body>
