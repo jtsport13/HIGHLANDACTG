@@ -39,7 +39,7 @@
       </table>
     </div>
 
-    <p class="footer-note">Edits sync to Google Sheets when connected &middot; They apply to the Expenses page too</p>
+    <p class="footer-note">Edits and splits sync to Google Sheets &middot; They apply to the Expenses page too</p>
   </div>
 
   <div id="editModal" class="modal hidden">
@@ -67,6 +67,7 @@
       </div>
       <div class="modal-actions">
         <button class="filter-btn" id="modalCancel">Cancel</button>
+        <button class="filter-btn" id="modalSplit" style="background:#e3f2fd;color:#1565c0;">Split</button>
         <button class="filter-btn active" id="modalSave">Save</button>
       </div>
     </div>
@@ -78,6 +79,8 @@ var baseData = [{"d":"2026-03-07","c":"Office/General Administrative Expenses","
     var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbykJgblfWpZCgA_41HEizcNFcz3Nw-vgYQM6dPXDcQm_JnVcsYugEHxV1QOSLpWkxQ/exec';
     var edits = {};
     try { edits = JSON.parse(localStorage.getItem('hac_edits') || '{}'); } catch(e) { edits = {}; }
+    var splits = {};
+    try { splits = JSON.parse(localStorage.getItem('hac_splits') || '{}'); } catch(e) { splits = {}; }
 
     function fmt(n) { return '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
 
@@ -106,9 +109,13 @@ var baseData = [{"d":"2026-03-07","c":"Office/General Administrative Expenses","
         .then(function(r) { return r.json(); })
         .then(function(data) {
           var merged = {};
-          for (var k in data) merged[k] = data[k];
+          for (var k in data.edits || data) merged[k] = data.edits ? data.edits[k] : data[k];
           for (var k in edits) merged[k] = edits[k];
           edits = merged;
+          if (data.splits) {
+            for (var k in data.splits) splits[k] = data.splits[k];
+            localStorage.setItem('hac_splits', JSON.stringify(splits));
+          }
           saveEdits();
           renderTable(document.getElementById('searchBox').value);
           document.getElementById('syncStatus').textContent = 'Synced';
@@ -130,7 +137,7 @@ var baseData = [{"d":"2026-03-07","c":"Office/General Administrative Expenses","
         html += '<tr class="txn-row' + (r._edited ? ' edited' : '') + '" data-id="' + r.id + '">' +
           '<td>' + r.d + '</td>' +
           '<td>' + r.v.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\'/g,'&#39;') + '</td>' +
-          '<td class="cat-cell">' + r.c + (r._edited ? ' <span class="edit-badge">edited</span>' : '') + '</td>' +
+          '<td class="cat-cell">' + r.c + (splits[r.id] ? ' <span class="edit-badge" style="background:#e3f2fd;color:#1565c0;">split</span>' : (r._edited ? ' <span class="edit-badge">edited</span>' : '')) + '</td>' +
           '<td class="amount' + (isNeg ? ' negative' : '') + '">' + (isNeg ? '-' : '') + fmt(r.a) + '</td></tr>';
       }
       document.getElementById('txnBody').innerHTML = html;
@@ -186,6 +193,12 @@ var baseData = [{"d":"2026-03-07","c":"Office/General Administrative Expenses","
       syncEditToSheet(id);
       document.getElementById('editModal').className = 'modal hidden';
       renderTable(document.getElementById('searchBox').value);
+    };
+
+    document.getElementById('modalSplit').onclick = function() {
+      var id = parseInt(document.getElementById('editModal').getAttribute('data-id'));
+      document.getElementById('editModal').className = 'modal hidden';
+      window.location = 'split.html?id=' + id;
     };
 
     document.getElementById('searchBox').oninput = function() { renderTable(this.value); };

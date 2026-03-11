@@ -49,10 +49,21 @@
     try { edits = JSON.parse(localStorage.getItem('hac_edits') || '{}'); } catch(e) {}
 
     function applyEdits() {
-      return DATA.map(function(r) {
-        var e = edits[r.id]; if (!e) return r;
-        return {id:r.id, d:e.d||r.d, v:e.v||r.v, c:e.c||r.c, a:r.a};
+      var splits = {};
+      try { splits = JSON.parse(localStorage.getItem('hac_splits') || '{}'); } catch(ex) {}
+      var result = [];
+      DATA.forEach(function(r) {
+        if (splits[r.id] && splits[r.id].length > 0) {
+          splits[r.id].forEach(function(s, idx) {
+            result.push({id: r.id + '_' + idx, d: s.d, v: s.v, c: s.c, a: s.a});
+          });
+        } else {
+          var e = edits[r.id];
+          if (!e) { result.push(r); }
+          else { result.push({id:r.id, d:e.d||r.d, v:e.v||r.v, c:e.c||r.c, a:r.a}); }
+        }
       });
+      return result;
     }
 
     function loadEditsFromSheet() {
@@ -60,8 +71,12 @@
       fetch(SCRIPT_URL)
         .then(function(r) { return r.json(); })
         .then(function(data) {
-          for (var k in data) edits[k] = data[k];
+          var editsData = data.edits || data;
+          for (var k in editsData) edits[k] = editsData[k];
           localStorage.setItem('hac_edits', JSON.stringify(edits));
+          if (data.splits) {
+            localStorage.setItem('hac_splits', JSON.stringify(data.splits));
+          }
           render(currentRange);
         })
         .catch(function() {});
