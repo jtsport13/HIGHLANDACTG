@@ -50,7 +50,7 @@
 
     function fmt(n) { return '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
     var today = new Date('2026-03-10');
-    var activeCat = null, currentRange = 'all';
+    var activeCats = {}, currentRange = 'all';
 
     var activeGroup = null;
     var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbykJgblfWpZCgA_41HEizcNFcz3Nw-vgYQM6dPXDcQm_JnVcsYugEHxV1QOSLpWkxQ/exec';
@@ -150,7 +150,7 @@
           catHtml = '<div class="group-categories">' + grp.cats.map(function(entry) {
             var cat = entry[0], data = entry[1];
             var catPct = Math.max(0, (Math.abs(data.total) / maxCatVal) * 100);
-            var isNeg = data.total < 0, isOpen = activeCat === cat;
+            var isNeg = data.total < 0, isOpen = !!activeCats[cat];
             var txnRows = data.txns.sort(function(a,b){return b.d.localeCompare(a.d);}).map(function(t){
               var tNeg = t.a < 0;
               return '<tr><td>'+t.d+'</td><td>'+t.v.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\'/g,'&#39;')+'</td><td class="amount'+(tNeg?' negative':'')+'">'+( tNeg?'-':'')+fmt(t.a)+'</td></tr>';
@@ -181,7 +181,7 @@
         grpHdrs[i].onclick = (function(el){return function(){
           var g = el.getAttribute('data-group');
           activeGroup = activeGroup === g ? null : g;
-          activeCat = null;
+          activeCats = {};
           render(currentRange);
         };})(grpHdrs[i]);
       }
@@ -189,7 +189,7 @@
       var hdrs = container.getElementsByClassName('cat-header');
       for (var i = 0; i < hdrs.length; i++) {
         hdrs[i].onclick = (function(el){return function(){
-          activeCat = activeCat === el.getAttribute('data-cat') ? null : el.getAttribute('data-cat');
+          var c = el.getAttribute('data-cat'); if (activeCats[c]) delete activeCats[c]; else activeCats[c] = true;
           render(currentRange);
         };})(hdrs[i]);
       }
@@ -199,7 +199,7 @@
     for(var i=0;i<btns.length;i++){
       btns[i].onclick=(function(btn){return function(){
         for(var j=0;j<btns.length;j++)btns[j].classList.remove('active');
-        btn.classList.add('active');activeCat=null;render(btn.getAttribute('data-range'));
+        btn.classList.add('active');activeCats={};render(btn.getAttribute('data-range'));
       };})(btns[i]);
     }
     render('all');
